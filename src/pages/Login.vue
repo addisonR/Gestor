@@ -1,0 +1,170 @@
+<script setup>
+import { ref } from "vue";
+import { useRouter } from "vue-router";
+
+const correo = ref("");
+const contraseña = ref("");
+const tongleContraseña = ref(false);
+
+const router = useRouter();
+
+function login() {
+  const usuario = correo.value;
+  const clave = contraseña.value;
+
+  if (usuario !== "addison@test.com") {
+    return alert("Datos incorrectos");
+  }
+
+  if (clave !== "123456") {
+    return alert("Datos incorrectos");
+  }
+
+  const token = "asdasd41f13sd4f132sdf3";
+  localStorage.setItem("access-point", token);
+
+  router.push("/dashboard");
+}
+
+function verContraseña() {
+  tongleContraseña.value = !tongleContraseña.value;
+}
+</script>
+
+<template>
+  <div class="login-contenedor">
+    <h1>Iniciar sesion</h1>
+    <form class="form-login" action="" @submit.prevent="login">
+      <label class="label-form" for="correo">Correo</label>
+      <input
+        v-model="correo"
+        class="input-form"
+        type="email"
+        name="correo"
+        id="correo"
+        placeholder="Test@correo.com"
+        required
+      />
+      <label class="label-form" for="contraseña">Contraseña</label>
+      <div class="password-wrapper">
+        <input
+          v-model="contraseña"
+          class="input-form"
+          :type="tongleContraseña ? 'text' : 'password'"
+          name="contraseña"
+          id="contraseña"
+          placeholder="************"
+          minlength="6"
+          required
+        />
+        <button
+          type="button"
+          class="toggle-password"
+          @click="verContraseña()"
+          aria-label="Alternar visibilidad de contraseña"
+        >
+          {{ tongleContraseña ? "🙈" : "👁️" }}
+        </button>
+      </div>
+      <input class="btn-form" type="submit" value="Ingresar" />
+    </form>
+  </div>
+</template>
+
+<style scoped>
+.login-contenedor {
+  background-color: #ffffff;
+  padding: 40px;
+  border-radius: 10px;
+  box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
+  width: 100%;
+  max-width: 380px;
+  text-align: center;
+  margin: 50px auto;
+  font-family: Arial, sans-serif;
+}
+
+.login-contenedor h1 {
+  color: #333333;
+  margin-bottom: 30px;
+  font-size: 28px;
+  font-weight: 600;
+}
+
+.form-login {
+  display: flex;
+  flex-direction: column;
+  text-align: left;
+  margin-bottom: 20px;
+}
+
+.label-form {
+  color: #555555;
+  font-weight: 500;
+  margin-bottom: 5px;
+  margin-top: 15px;
+  font-size: 15px;
+}
+
+.input-form {
+  padding: 12px 15px;
+  border: 1px solid #cccccc;
+  border-radius: 6px;
+  font-size: 16px;
+  transition: border-color 0.3s, box-shadow 0.3s;
+}
+
+.input-form:focus {
+  border-color: #007bff;
+  outline: none;
+  box-shadow: 0 0 0 3px rgba(0, 123, 255, 0.25);
+}
+
+.password-wrapper {
+  position: relative;
+  display: flex;
+}
+
+.password-wrapper .input-form {
+  width: 100%;
+}
+
+.toggle-password {
+  position: absolute;
+  right: 10px;
+  top: 50%;
+  transform: translateY(-50%);
+  background: none;
+  border: none;
+  cursor: pointer;
+  padding: 0;
+  font-size: 1.2rem;
+  line-height: 1;
+}
+
+.password-wrapper .input-form {
+  padding-right: 40px;
+}
+
+.btn-form {
+  background-color: #007bff;
+  color: white;
+  padding: 12px 20px;
+  border: none;
+  border-radius: 6px;
+  cursor: pointer;
+  font-size: 17px;
+  font-weight: bold;
+  width: 100%;
+  margin-top: 25px;
+  transition: background-color 0.3s ease, transform 0.1s;
+}
+
+.btn-form:hover {
+  background-color: #0056b3;
+}
+
+.btn-form:active {
+  transform: scale(0.99);
+}
+</style>
