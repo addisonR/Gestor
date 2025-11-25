@@ -1,17 +1,25 @@
 <script setup>
 import { ref } from "vue";
 import { useRouter } from "vue-router";
+import { useProfeliStore } from "@/stores/profile";
 
 const correo = ref("");
 const contraseña = ref("");
 const tongleContraseña = ref(false);
+const userData = ref({
+  name: "",
+  role: "",
+  image: "",
+});
 
+const profileStore = useProfeliStore();
 const router = useRouter();
 
 function login() {
   const usuario = correo.value;
   const clave = contraseña.value;
 
+  //VERIFICAR USUARIO
   if (usuario !== "addison@test.com") {
     return alert("Datos incorrectos");
   }
@@ -20,9 +28,19 @@ function login() {
     return alert("Datos incorrectos");
   }
 
+  //CREAR TOKEN
   const token = "asdasd41f13sd4f132sdf3";
   localStorage.setItem("access-point", token);
 
+  //GUARDAR ESTADO DE USUARIO
+  userData.value = {
+    name: "addison",
+    role: "admin",
+    image: "../../public/favicon.ico",
+  };
+  profileStore.dataProfile(userData);
+
+  //IR A DASHBOARD
   router.push("/dashboard");
 }
 

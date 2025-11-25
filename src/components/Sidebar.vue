@@ -1,6 +1,12 @@
 <script setup>
+import { ref } from "vue";
+import { useProfeliStore } from "@/stores/profile";
 import { useRouter } from "vue-router";
 
+const profileStore = useProfeliStore();
+const name = profileStore.name;
+const role = profileStore.role;
+const image = profileStore.image;
 const router = useRouter();
 
 function cerrarSesion() {
@@ -12,9 +18,9 @@ function cerrarSesion() {
 <template>
   <div class="sidebar">
     <div class="sidebar-hero">
-      <img src="#" alt="" />
-      <h2>Mi nombre</h2>
-      <p>Rol</p>
+      <img :src="image" alt="" />
+      <h2>{{ name }}</h2>
+      <p>{{ role }}</p>
     </div>
     <div class="sidebar-menu">
       <ul>
