@@ -3,45 +3,56 @@ import { ref } from "vue";
 import { useRouter } from "vue-router";
 import { useProfeliStore } from "@/stores/profile";
 
-const correo = ref("");
-const contraseña = ref("");
+const email = ref("");
+const password = ref("");
 const tongleContraseña = ref(false);
 const userData = ref({
   name: "",
   role: "",
   image: "",
 });
+const URL = "http://localhost:3000";
 
 const profileStore = useProfeliStore();
 const router = useRouter();
 
-function login() {
-  const usuario = correo.value;
-  const clave = contraseña.value;
-
-  //VERIFICAR USUARIO
-  if (usuario !== "addison@test.com") {
-    return alert("Datos incorrectos");
-  }
-
-  if (clave !== "123456") {
-    return alert("Datos incorrectos");
-  }
-
-  //CREAR TOKEN
-  const token = "asdasd41f13sd4f132sdf3";
-  localStorage.setItem("access-point", token);
-
-  //GUARDAR ESTADO DE USUARIO
-  userData.value = {
-    name: "addison",
-    role: "admin",
-    image: "../../public/favicon.ico",
+async function login() {
+  const credentials = {
+    email: email.value,
+    password: password.value,
   };
-  profileStore.dataProfile(userData);
 
-  //IR A DASHBOARD
-  router.push("/dashboard");
+  try {
+    const response = await fetch(`${URL}/login`, {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify(credentials),
+    });
+    if (!response.ok) {
+      if (response.status === 401) {
+        return alert("Credenciales inválidas. Verifica tu email o contraseña.");
+      } else {
+        return console.log(errorData.message);
+      }
+    }
+    const data = await response.json();
+    const token = data.token;
+    localStorage.setItem("access-point", token);
+    //GUARDAR ESTADO DE USUARIO
+    userData.value = {
+      name: data.name,
+      role: data.role,
+      image: "../../public/favicon.ico",
+    };
+    profileStore.dataProfile(userData);
+
+    //IR A DASHBOARD
+    router.push("/dashboard");
+  } catch (error) {
+    return null;
+  }
 }
 
 function verContraseña() {
@@ -55,7 +66,7 @@ function verContraseña() {
     <form class="form-login" action="" @submit.prevent="login">
       <label class="label-form" for="correo">Correo</label>
       <input
-        v-model="correo"
+        v-model="email"
         class="input-form"
         type="email"
         name="correo"
@@ -66,7 +77,7 @@ function verContraseña() {
       <label class="label-form" for="contraseña">Contraseña</label>
       <div class="password-wrapper">
         <input
-          v-model="contraseña"
+          v-model="password"
           class="input-form"
           :type="tongleContraseña ? 'text' : 'password'"
           name="contraseña"
