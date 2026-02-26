@@ -1,5 +1,4 @@
 <script setup>
-import { ref } from "vue";
 import { useProfeliStore } from "@/stores/profile";
 import { useRouter } from "vue-router";
 
@@ -9,8 +8,15 @@ const role = profileStore.role;
 const image = profileStore.image;
 const router = useRouter();
 
-function cerrarSesion() {
-  localStorage.removeItem("access-point");
+async function cerrarSesion() {
+  const response = await fetch("http://localhost:3000/logout", {
+    method: "POST",
+    credentials: "include", // Necesario para que el navegador sepa qué cookie borrar
+  });
+  if (!response.ok) {
+    console.error("Error al cerrar sesión:", response.statusText);
+    return;
+  }
   router.push("/");
 }
 </script>

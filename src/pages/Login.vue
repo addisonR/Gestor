@@ -38,8 +38,6 @@ async function login() {
       }
     }
     const data = await response.json();
-    const token = data.token;
-    localStorage.setItem("access-point", token);
     //GUARDAR ESTADO DE USUARIO
     userData.value = {
       name: data.name,
@@ -140,7 +138,9 @@ function verContraseña() {
   border: 1px solid #cccccc;
   border-radius: 6px;
   font-size: 16px;
-  transition: border-color 0.3s, box-shadow 0.3s;
+  transition:
+    border-color 0.3s,
+    box-shadow 0.3s;
 }
 
 .input-form:focus {
@@ -186,7 +186,9 @@ function verContraseña() {
   font-weight: bold;
   width: 100%;
   margin-top: 25px;
-  transition: background-color 0.3s ease, transform 0.1s;
+  transition:
+    background-color 0.3s ease,
+    transform 0.1s;
 }
 
 .btn-form:hover {

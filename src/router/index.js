@@ -7,13 +7,15 @@ const router = createRouter({
   routes,
 });
 
-router.beforeEach((to, from, next) => {
-  const isAuthenticated = isLoggedIn();
+router.beforeEach(async (to, from, next) => {
+  const isAuthenticated = await isLoggedIn();
 
+  // Si intenta ir al Login pero YA está autenticado -> Al Dashboard
   if (to.name === "Login" && isAuthenticated) {
     return next({ name: "Dashboard" });
   }
 
+  // Si la ruta requiere auth y NO está autenticado -> Al Login
   if (to.meta.requiresAuth) {
     if (isAuthenticated) {
       next();
@@ -21,7 +23,7 @@ router.beforeEach((to, from, next) => {
       next({ name: "Login" });
     }
   } else {
-    next();
+    next(); // Rutas públicas
   }
 });
 

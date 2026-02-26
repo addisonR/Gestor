@@ -1,8 +1,10 @@
-export function isLoggedIn() {
-  const token = localStorage.getItem("access-point");
-  if (token === null) {
+export async function isLoggedIn() {
+  const url = "http://localhost:3000";
+  try {
+    const response = await fetch(`${url}/api/check-session`);
+    const result = await response.json();
+    return result.authenticated;
+  } catch (error) {
     return false;
   }
-  // La verificación real debería incluir si el token no ha expirado
-  return true; // Devuelve true si el token existe, false si no
 }
